@@ -2,9 +2,9 @@
 /*
 Plugin Name: WpDebugUtil
 Plugin URI: http://github.com/jcamenisch/wp-debug-util
-Description: Debugging utilities for WordPress development
+Description: Poke around the WordPress environment from the comfort of your Javascript console. Everything in here is pretty dangerous, and not for use in production.
 Author: Jonathan Camenisch
-Version: 0.1
+Version: 0.2
 Author URI: http://github.com/jcamenisch/
 */
 
@@ -36,6 +36,18 @@ class WpDebugUtil {
     <?php
   }
 
+  /**
+   * Evals PHP statement(s) provided in $_POST['code']
+   * and immediately exits.
+   *
+   * (designed to be called via WordPress ajax action,
+   * and doesn't make much sense in other contexts.)
+   *
+   * Only works if logged in user has 'update_core' capability; This function
+   * would otherwise be very dangerous!
+   *
+   * @return undefined Only echoes to browser (or buffer, as the case may be).
+   */
   public static function do_eval() {
     header("Content-Type: text/plain");
 
@@ -51,13 +63,17 @@ class WpDebugUtil {
   }
 
   /**
-   * Evaluates PHP expression in $_POST['code'] and outputs result with print_r
-   * Then immediately exits. (designed to be called via WordPress ajax action,
-   * and doesn't make much sense in other contexts.)
-   * Only works if logged in user has 'update_core' capability; This code
-   * could otherwise be very dangerous!
+   * Evaluates PHP expression provided in $_POST['code']
+   * Outputs result with print_r
+   * and immediately exits.
    *
-   * @return undefined Only echo to browser (or buffer, as the case may be).
+   * (designed to be called via WordPress ajax action,
+   * and doesn't make much sense in other contexts.)
+   *
+   * Only works if logged in user has 'update_core' capability; This function
+   * would otherwise be very dangerous!
+   *
+   * @return undefined Only echoes to browser (or buffer, as the case may be).
    */
   public static function print_r() {
     header("Content-Type: text/plain");
