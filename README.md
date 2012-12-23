@@ -25,13 +25,42 @@ From any Page in WordPress, open the JavaScript console in your browser of choic
 From there, enter the following commands to interact with the server-side WordPress
 environment.
 
+### WpDebug.print_r(phpExpression);
+
+Send a PHP expression to the server, where it will be evaluated with `eval` and then
+output with print_r. The result is then displayed in the console.
+
+#### Examples:
+
+```javascript
+WpDebug.print_r('2 + 2');
+```
+
+Returns '4'
+
+```javascript
+WpDebug.print_r('is_admin()');
+```
+
+Returns '1'
+
 ### WpDebug.eval(phpStatements);
 
 Send any PHP code to the server, where it will be run with `eval`. With this, you can
 create, edit, and delete data, modify the session—and anything else that you could do
 from PHP code in WordPress.
 
-Known issue: PHP's eval seems to have a funny way of handling quote characters. I've
+#### Example:
+
+```javascript
+WpDebug.eval('phpinfo();');
+```
+
+Displays the entire output of phpinfo() to the console.
+
+#### Known issue
+
+PHP's eval seems to have a funny way of handling quote characters. I've
 noticed the following raises a parse error:
 
 ```javascript
@@ -43,8 +72,3 @@ However the following works fine:
 ```javascript
 WpDebug.eval("unset($_SESSION[a_key]);");
 ```
-
-### WpDebug.print_r(phpExpression);
-
-Send a PHP expression to the server, where it will be evaluated with `eval` and then
-output with print_r. The result is then displayed in the console.
