@@ -35,13 +35,21 @@ class WpDebugUtil {
     <?php
   }
 
+  /**
+   * Evaluates PHP expression in $_POST['code'] and outputs result with print_r
+   * Then immediately exits. (designed to be called via WordPress ajax action,
+   * and doesn't make much sense in other contexts.)
+   * Only works if logged in user has 'update_core' capability; This code
+   * could otherwise be very dangerous!
+   *
+   * @return undefined Only echo to browser (or buffer, as the case may be).
+   */
   public static function print_r() {
     header("Content-Type: text/plain");
 
-    if(isset($_POST['code'])) {
-      print_r(eval('return ' . $_POST['code'] . ';'));
-    } else {
-      echo 'No code provided';
+    if (current_user_can('update_core')) {
+      if(isset($_REQUEST['code']))   print_r(eval('return ' . $_POST['code'] . ';'));
+      else                           echo 'No code provided';
     }
 
     exit;
