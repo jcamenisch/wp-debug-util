@@ -44,7 +44,7 @@ However the following works fine:
 WpDebug.eval("unset($_SESSION[a_key]);");
 ```
 
-### WpDebug.print_r
+### WpDebug.print_r(phpExpression);
 
 Send a PHP expression to the server, where it will be evaluated with `eval` and then
 output with print_r. The result is then displayed in the console.
