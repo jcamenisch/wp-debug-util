@@ -14,6 +14,7 @@ class WpDebugUtil {
   public static function init() {
     if (current_user_can('update_core')) {
 
+      add_action('wp_ajax_wp-debug-util-eval', 'WpDebugUtil::do_eval');
       add_action('wp_ajax_wp-debug-util-print_r', 'WpDebugUtil::print_r');
 
       wp_register_script('wp-debug-util',
@@ -35,6 +36,20 @@ class WpDebugUtil {
     <?php
   }
 
+  public static function do_eval() {
+    header("Content-Type: text/plain");
+
+    if (current_user_can('update_core')) {
+      if(isset($_REQUEST['code'])) {
+        echo "\nEvaling:\n{$_REQUEST['code']}\n";
+        eval($_REQUEST['code']);
+      }
+      else echo 'No code provided';
+    }
+
+    exit;
+  }
+
   /**
    * Evaluates PHP expression in $_POST['code'] and outputs result with print_r
    * Then immediately exits. (designed to be called via WordPress ajax action,
@@ -48,7 +63,7 @@ class WpDebugUtil {
     header("Content-Type: text/plain");
 
     if (current_user_can('update_core')) {
-      if(isset($_REQUEST['code']))   print_r(eval('return ' . $_POST['code'] . ';'));
+      if(isset($_REQUEST['code']))   print_r(eval('return ' . $_REQUEST['code'] . ';'));
       else                           echo 'No code provided';
     }
 

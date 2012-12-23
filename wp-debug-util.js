@@ -1,10 +1,12 @@
 WpDebug = {
-  do: function(action, data, success) {
+  ajax_action: function(action, data) {
     jQuery.ajax({
       type:    'POST',
       url:     WpDebug.ajax_url,
       data:    _.extend(data, {action: 'wp-debug-util-' + action}),
-      success: success,
+      success: function(data) {
+        console.log(data);
+      },
       error:   WpDebug.error
     });
   },
@@ -14,10 +16,9 @@ WpDebug = {
     WpDebug.errors.push(arguments);
   },
   print_r: function(code) {
-    WpDebug.do('print_r', {code: code},
-      function(data) {
-        console.log(data);
-      }
-    );
+    WpDebug.ajax_action('print_r', {code: code});
+  },
+  eval: function(code) {
+    WpDebug.ajax_action('eval', {code: code});
   }
 }
