@@ -36,6 +36,10 @@ class WpDebugUtil {
     <?php
   }
 
+  public static function request($key) {
+    return stripslashes($_REQUEST[$key]);
+  }
+
   /**
    * Evals PHP statement(s) provided in $_POST['code']
    * and immediately exits.
@@ -53,8 +57,8 @@ class WpDebugUtil {
 
     if (current_user_can('update_core')) {
       if(isset($_REQUEST['code'])) {
-        echo "\nEvaling:\n{$_REQUEST['code']}\n";
-        eval($_REQUEST['code']);
+        echo "\nEvaling: " . self::request('code') . "\n";
+        eval(self::request('code'));
       }
       else echo 'No code provided';
     }
@@ -79,7 +83,7 @@ class WpDebugUtil {
     header("Content-Type: text/plain");
 
     if (current_user_can('update_core')) {
-      if(isset($_REQUEST['code']))   print_r(eval('return ' . $_REQUEST['code'] . ';'));
+      if(isset($_REQUEST['code']))   print_r(eval('return ' . self::request('code') . ';'));
       else                           echo 'No code provided';
     }
 

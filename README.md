@@ -60,15 +60,17 @@ Displays the entire output of phpinfo() to the console.
 
 #### Known issue
 
-PHP's eval seems to have a funny way of handling quote characters. I've
-noticed the following raises a parse error:
+Because of some odd issues with PHP's handling of quotation marks, this plugin strips
+slashes from submitted code strings. To send a legitimate slash, enter two in your string.
+
+For example, the following will raise a parse error:
 
 ```javascript
-WpDebug.eval("unset($_SESSION['a_key']);");
+WpDebug.eval("'This won\'t work.'");
 ```
 
 However the following works fine:
 
 ```javascript
-WpDebug.eval("unset($_SESSION[a_key]);");
+WpDebug.eval("'This isn\\'t a problem.'");
 ```
